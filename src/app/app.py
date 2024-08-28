@@ -37,12 +37,21 @@ modified_text_prompting = ""
 modified_text_fine_tuning = ""
 modified_text_gliner = ""
 
+# Crear un contenedor vacío para el mensaje de ejecución
+message_placeholder = st.empty()
+
 # Botón de ejecución
 if st.button("Execute"):
-    st.write("Ejecutando NER en las alternativas...")
+    # Mostrar el mensaje de ejecución
+    message_placeholder.text("Ejecutando NER en las alternativas...")
+
+    # Procesar el texto con los diferentes métodos de NER
     modified_text_prompting = apply_prompting_ner_to_text(input_text)
     modified_text_fine_tuning = apply_fine_tuning_ner_to_text(input_text)
     modified_text_gliner = apply_gliner_ner_to_text(input_text)
+
+    # Borrar el mensaje después de la ejecución
+    message_placeholder.empty()
 
 # Tres columnas para las diferentes alternativas de NER
 col1, col2, col3 = st.columns(3)
