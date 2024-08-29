@@ -8,7 +8,7 @@ enviroment_files = {
 ROOT_DIR = os.path.dirname(os.path.join(os.path.dirname(__file__), ".."))
 
 
-def select_enviroment(user):
+def select_enviroment(user="default"):
     if user in enviroment_files:
         env_dir = os.path.join(ROOT_DIR, enviroment_files[user])
         load_dotenv(dotenv_path=env_dir, override=True)
