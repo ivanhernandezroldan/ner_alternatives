@@ -5,7 +5,9 @@ enviroment_files = {
     "default": ".env",
 }
 
-ROOT_DIR = os.path.dirname(os.path.join(os.path.dirname(__file__), "..", ".."))
+ROOT_DIR = os.path.dirname(
+    os.path.join(os.path.dirname(__file__), "..", "..", "..", "..")
+)
 
 
 def select_enviroment(user="default"):
