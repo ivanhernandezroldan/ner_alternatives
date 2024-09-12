@@ -17,10 +17,58 @@ LABELS = [
     "Symptoms experienced by patients",
 ]
 
+empty_result = {
+    "adverse_drug_reactions": [],
+    "diseases_or_medical_conditions": [],
+    "medications": [],
+    "clinical_findings": [],
+    "symptoms_experienced_by_patients": [],
+}
 
-def apply_ner_to_text(text):
-    entities = model.predict_entities(text, LABELS, threshold=0.5)
-    ner_text = ""
+
+def transform_to_structured_output(entities):
+    # Inicializamos el diccionario estructurado
+    structured_output = {
+        "adverse_drug_reactions": [],
+        "diseases_or_medical_conditions": [],
+        "medications": [],
+        "clinical_findings": [],
+        "symptoms_experienced_by_patients": [],
+    }
+
+    # Mapeo de etiquetas a las claves del diccionario estructurado
+    label_to_key = {
+        "Adverse drug reactions": "adverse_drug_reactions",
+        "Diseases or medical conditions": "diseases_or_medical_conditions",
+        "Medications": "medications",
+        "Clinical findings": "clinical_findings",
+        "Symptoms experienced by patients": "symptoms_experienced_by_patients",
+    }
+
+    # Iteramos sobre cada entidad y la agregamos a la clave correspondiente
     for entity in entities:
-        ner_text += f"{entity['text']} => {entity['label']}\n"
-    return ner_text
+        key = label_to_key.get(entity["label"])
+        if key:
+            structured_output[key].append(
+                (entity["text"], entity["start"], entity["end"])
+            )
+
+    return structured_output
+
+
+def apply_ner_to_text_gliner(text, model_id):
+    try:
+        entities = model.predict_entities(text, LABELS, threshold=0.5)
+        return transform_to_structured_output(entities)
+    except Exception as e:
+        print(f"Error apply_ner_to_text_gliner(): {e}")
+        return empty_result
+
+
+"""
+# Example usage
+text = "Hunger pangs.\nBrilliant, I have a new lease of life, I walk up & down steps properly, no longer sideways like a toddler, hip pain has gone other than if I jar it.\n"
+response_gliner = apply_ner_to_text_gliner(text)
+
+print(response_gliner)
+"""
