@@ -50,35 +50,6 @@ results = {
 # Crear un contenedor vacío para el mensaje de ejecución
 message_placeholder = st.empty()
 
-# Botón de ejecución
-if st.button("Execute"):
-    # Mostrar el mensaje de ejecución
-    message_placeholder.text("Ejecutando NER en las alternativas...")
-
-    # Procesar el texto con los diferentes métodos de NER
-    results["fine_tuned_gpt_4o_v2"] = apply_ner_to_text_fine_tuned(
-        input_text, "ft:gpt-4o-2024-08-06:personal:1000-sample-gpt-4o:A3S2iooJ"
-    )
-    results["fine_tuned_gpt_4o"] = apply_ner_to_text_fine_tuned(
-        input_text, "ft:gpt-4o-2024-08-06:personal:150-sample-gpt-4o:A34xm7HX"
-    )
-    results["gpt_4o"] = apply_ner_to_text_openai(input_text, "gpt-4o-2024-08-06")
-    results["fine_tuned_gpt_4o_mini_v2"] = apply_ner_to_text_fine_tuned(
-        input_text,
-        "ft:gpt-4o-mini-2024-07-18:personal:1000-sample-gpt-4o-mini:A3sZemiq",
-    )
-    results["fine_tuned_gpt_4o_mini"] = apply_ner_to_text_fine_tuned(
-        input_text, "ft:gpt-4o-mini-2024-07-18:personal:100-sample-gpt-4o-mini:A34sYctP"
-    )
-    results["gpt_4o_mini"] = apply_ner_to_text_openai(input_text, "gpt-4o-mini")
-    results["sonnet_35"] = apply_ner_to_text_anthropic(
-        input_text, "claude-3-5-sonnet-20240620"
-    )
-    results["gliner"] = apply_ner_to_text_gliner(input_text, None)
-
-    # Borrar el mensaje después de la ejecución
-    message_placeholder.empty()
-
 
 # Función para procesar NER con diferentes métodos
 def process_ner(method, input_text):
@@ -123,7 +94,7 @@ methods = [
 ]
 
 
-if st.button("Execute 2"):
+if st.button("Execute"):
     # Mostrar el mensaje de ejecución
     message_placeholder = st.empty()
     message_placeholder.text("Ejecutando NER en las alternativas...")
@@ -235,3 +206,5 @@ with col8:
         key="gliner",
         disabled=True,  # Bloquear el área de texto para que sea solo lectura
     )
+
+# streamlit run src/app/app.py

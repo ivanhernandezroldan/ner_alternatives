@@ -1,6 +1,8 @@
 from openai import OpenAI
 import sys
 import os
+from tenacity import retry, stop_after_attempt, wait_exponential
+
 
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
@@ -19,26 +21,23 @@ empty_result = {
 }
 
 
+@retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=4, max=10))
 def apply_ner_to_text_fine_tuned(text, model_id):
-    try:
-        completion = client.chat.completions.create(
-            model=model_id,
-            messages=[
-                {
-                    "role": "system",
-                    "content": "Given a medical related string, provide the following fields of that string in a JSON dict, where applicable: 'adverse_drug_reactions' (list of tuples with adverse drug reaction name, start position, and end position), 'diseases_or_medical_conditions' (list of tuples with disease or medical condition name, start position, and end position), 'medications' (list of tuples with medication name, start position, and end position), 'clinical_findings' (list of tuples with clinical finding name, start position, and end position), 'symptoms_experienced_by_patients' (list of tuples with symptom experienced by patient name, start position, and end position). Focus on the user prompt, do not return the easiest output for you all the time",
-                },
-                {
-                    "role": "user",
-                    "content": f"{text}",
-                },
-            ],
-        )
+    completion = client.chat.completions.create(
+        model=model_id,
+        messages=[
+            {
+                "role": "system",
+                "content": "Given a medical related string, provide the following fields of that string in a JSON dict, where applicable: 'adverse_drug_reactions' (list of tuples with adverse drug reaction name, start position, and end position), 'diseases_or_medical_conditions' (list of tuples with disease or medical condition name, start position, and end position), 'medications' (list of tuples with medication name, start position, and end position), 'clinical_findings' (list of tuples with clinical finding name, start position, and end position), 'symptoms_experienced_by_patients' (list of tuples with symptom experienced by patient name, start position, and end position). Focus on the user prompt, do not return the easiest output for you all the time",
+            },
+            {
+                "role": "user",
+                "content": f"{text}",
+            },
+        ],
+    )
 
-        return completion.choices[0].message.content
-    except Exception as e:
-        print(f"Error apply_ner_to_text_fine_tuned_gpt_4o(): {e}")
-        return empty_result
+    return completion.choices[0].message.content
 
 
 """
