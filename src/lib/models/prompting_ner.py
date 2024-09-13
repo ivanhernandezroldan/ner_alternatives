@@ -1,6 +1,8 @@
 import sys
 import os
 
+from tenacity import retry, stop_after_attempt, wait_exponential
+
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
 from utils.select_enviroment import select_enviroment
@@ -113,36 +115,30 @@ def get_prompt():
     return prompt
 
 
+@retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=4, max=10))
 def apply_ner_to_text_openai(text, model_id):
-    try:
-        llm = ChatOpenAI(model_name=model_id)
-        prompt = get_prompt()
-        structured_llm = llm.with_structured_output(MedicalNEROutput, include_raw=True)
+    llm = ChatOpenAI(model_name=model_id)
+    prompt = get_prompt()
+    structured_llm = llm.with_structured_output(MedicalNEROutput, include_raw=True)
 
-        sequence = prompt | structured_llm
-        response = sequence.invoke({"text": text})
-        structured_response = response["raw"].additional_kwargs["tool_calls"][0][
-            "function"
-        ]["arguments"]
-        return structured_response
-    except Exception as e:
-        print(f"Error apply_ner_to_text_gpt_4o(): {e}")
-        return empty_result
+    sequence = prompt | structured_llm
+    response = sequence.invoke({"text": text})
+    structured_response = response["raw"].additional_kwargs["tool_calls"][0][
+        "function"
+    ]["arguments"]
+    return structured_response
 
 
+@retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=4, max=10))
 def apply_ner_to_text_anthropic(text, model_id):
-    try:
-        llm = ChatAnthropic(model=model_id)
-        prompt = get_prompt()
-        structured_llm = llm.with_structured_output(MedicalNEROutput, include_raw=True)
+    llm = ChatAnthropic(model=model_id)
+    prompt = get_prompt()
+    structured_llm = llm.with_structured_output(MedicalNEROutput, include_raw=True)
 
-        sequence = prompt | structured_llm
-        response = sequence.invoke({"text": text})
-        structured_response = response["raw"].content[0]["input"]
-        return structured_response
-    except Exception as e:
-        print(f"Error apply_ner_to_text_sonnet_35(): {e}")
-        return empty_result
+    sequence = prompt | structured_llm
+    response = sequence.invoke({"text": text})
+    structured_response = response["raw"].content[0]["input"]
+    return structured_response
 
 
 """

@@ -1,4 +1,5 @@
 from gliner import GLiNER
+from tenacity import retry, stop_after_attempt, wait_exponential
 
 
 # Initialize GLiNER
@@ -56,13 +57,12 @@ def transform_to_structured_output(entities):
     return structured_output
 
 
+@retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=4, max=10))
 def apply_ner_to_text_gliner(text, model_id):
-    try:
-        entities = model.predict_entities(text, LABELS, threshold=0.5)
-        return transform_to_structured_output(entities)
-    except Exception as e:
-        print(f"Error apply_ner_to_text_gliner(): {e}")
-        return empty_result
+    entities = model.predict_entities(text, LABELS, threshold=0.5)
+    return transform_to_structured_output(entities)
+    print(f"Error apply_ner_to_text_gliner(): {e}")
+    return empty_result
 
 
 """
