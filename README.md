@@ -10,7 +10,6 @@ This project performs a comparative analysis of different alternatives for Named
 - [Installation](#installation)
 - [Usage](#usage)
 - [Docker](#docker)
-- [Technologies Used](#technologies-used)
 - [License](#license)
 
 ## 🎯 Description
