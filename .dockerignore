@@ -1,0 +1,53 @@
+# Ignore temporary and system files
+*.swp
+*.temp
+*.log
+*.tmp
+.DS_Store
+Thumbs.db
+
+# Ignore Git related files and folders
+.git
+.gitignore
+
+# Ignore Python environment files
+*.pyc
+*.pyo
+*.pyd
+__pycache__
+.pytest_cache/
+
+# Ignore Python virtual environments
+venv/
+env/
+.venv/
+
+# Ignore Node.js files and folders
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Ignore Docker configuration files
+Dockerfile*
+.dockerignore
+
+# Ignore environment configuration files
+#.env
+
+# Ignore build folders
+build/
+dist/
+target/
+
+# Ignore IDE and editor configuration files
+.idea/
+.vscode/
+*.code-workspace
+
+# Ignore test files and folders
+coverage/
+*.cover
+*.coverage
+
+# Windows dependencies
+requirements.txt
