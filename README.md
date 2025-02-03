@@ -24,12 +24,22 @@ This repository contains an implementation and comparative analysis of different
 ├── src/                    # Source code
 │   ├── app/               # Streamlit application
 │   └── lib/               # Libraries and utilities
+│       ├── utils/         # Utility functions and helpers
+│       ├── test/          # Test files
+│       ├── models/        # NER models implementations
+│       ├── evaluation/    # Evaluation scripts and metrics
+│       ├── preprocessing/ # Data preprocessing utilities
+│       └── fine_tune/     # Model fine-tuning scripts
 ├── results/               # Comparative results and analysis
 ├── resources/             # Additional resources
 ├── ner_dataset/          # Training and evaluation datasets
-├── requirements.txt      # Project dependencies (Windows)
+├── MASTER_THESIS_REPORT.pdf  # Detailed project documentation
+├── requirements.txt       # Project dependencies (Windows)
 ├── requirements_linux.txt # Project dependencies (Linux)
-├── Dockerfile           # Docker configuration
+├── Dockerfile            # Docker configuration
+├── .dockerignore         # Docker ignore rules
+├── .gitignore           # Git ignore rules
+├── LICENSE              # MIT License
 └── .env                 # Environment variables (not included in git)
 ```
 
